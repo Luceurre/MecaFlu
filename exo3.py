@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.integrate import odeint
 import matplotlib.patches
-import matplotlib; matplotlib.use("TkAgg")
+import matplotlib
 c = 10
 R = 10
 delta_x = 0.2
@@ -59,16 +59,19 @@ plt.show()
 
 # Question 5)
 
+R = 1
+b = complex(1, 1)
+Ndelta = 10
+deltas = np.linspace(0, 2 * np.pi, Ndelta)
+
+
 _, cx = plt.subplots()
 
-def delta(b, delta_x):
-    return 4 * (b.real ** 2) * (1 + np.exp(2 * delta_x * i)) - 4 * (1 - np.exp(2 * i * delta_x)) * (b ** 2 - (b.imag ** 2) * np.exp(2 * i * delta_x))
+for delta in deltas:
+    c = b + R * np.exp(i * delta)
 
-for centre in centres:
-    c = (2 * centre.real * (1 + np.exp(2 * i * delta_x)) + delta(centre, delta_x) ** 0.5) / (2 * (1 - np.exp(2 * i * delta_x)))
-
-    arc = joukovski(contour(centre, c, n), c)
-    cx.scatter(arc.real, arc.imag, color=np.random.rand(3, ), label="x = %.1f" % centre.real)
+    arc = joukovski(contour(b, c, n), c)
+    cx.scatter(arc.real, arc.imag, color=np.random.rand(3, ), label="delta = %.1f" % delta.real)
 
 cx.legend()
 cx.grid(True)
@@ -80,8 +83,8 @@ plt.show()
 
 U_inf = 1
 R = 1
-m = 0
-delta_t = 0.1
+m = -2
+delta_t = 0.2
 T_max = 10
 
 plot, dx = plt.subplots()
@@ -93,6 +96,7 @@ def f_prime(Z:complex):
 def equa_diff(x, t):
     Z = f_prime(complex(x[0], x[1]))
     return [Z.real, -Z.imag]
+
 
 def animation(xs):
     plt.xlim([np.min(xs[:, :, 0]), np.max(xs[:, :, 0])])
